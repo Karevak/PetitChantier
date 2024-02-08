@@ -1,0 +1,51 @@
+<ul id="liste-chantier">
+
+</ul>
+<style>
+    .bouton-supprimer  {
+        margin:0.5em;
+        background-color: red;
+        border-radius: 10px;
+        height:60px;
+    }
+    .bouton-supprimer:hover  {
+        background-color: rgb(119, 22, 22);
+        cursor: pointer;
+    }
+    li{
+        height: fit-content;
+        margin-top: 15px;
+    }
+</style>
+
+<script>
+
+    const ulChantier = document.querySelector("#liste-chantier")
+
+    fetch("http://localhost:8080/chantiers")
+    .then(resultat => resultat.json())
+    .then (listeChantier => {
+        
+        listeChantier.forEach(chantier => {
+
+            const li = document.createElement("li");
+
+            li.innerHTML = chantier.nom + chantier.responsable
+
+            ulChantier.appendChild(li);
+
+            const bouton = document.createElement("span");
+
+            bouton.innerHTML= "Supprimer"
+            bouton.classList.add("bouton-supprimer")
+            bouton.addEventListener("click",e =>{ 
+                fetch("http://localhost:8080/chantier/"+chantier.id,{
+                    method:"DELETE",
+                })
+                .then(resultat=>alert("chantier supprimé !"));
+        });
+            li.appendChild(bouton);
+        })
+    });
+
+</script>
